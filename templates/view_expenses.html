@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Expenses</title>
+</head>
+
+<body>
+
+<h1>💰 Expense List</h1>
+
+<br>
+
+<a href="/">🏠 Dashboard</a>
+
+&nbsp;&nbsp;
+
+<a href="/add-expense">➕ Add Expense</a>
+
+<br><br>
+
+
+<table border="1" cellpadding="10">
+
+<tr>
+    <th>ID</th>
+    <th>Category</th>
+    <th>Description</th>
+    <th>Amount</th>
+    <th>Action</th>
+</tr>
+
+
+{% for expense in expenses %}
+
+<tr>
+
+    <td>{{ expense[0] }}</td>
+
+    <td>{{ expense[1] }}</td>
+
+    <td>{{ expense[2] }}</td>
+
+    <td>₹ {{ expense[3] }}</td>
+
+
+    <td>
+
+        <a href="/edit-expense/{{ expense[0] }}">
+            ✏️ Edit
+        </a>
+
+        |
+
+        <a href="/delete-expense/{{ expense[0] }}">
+            🗑️ Delete
+        </a>
+
+    </td>
+
+</tr>
+
+{% else %}
+
+<tr>
+    <td colspan="5">
+        No Expenses Found
+    </td>
+</tr>
+
+{% endfor %}
+
+
+</table>
+
+
+</body>
+</html>

@@ -50,7 +50,9 @@
                 <div class="card shadow text-center">
                     <div class="card-body">
                         <h5 class="card-title">Today's Profit</h5>
-                        <h2 class="text-primary">₹0</h2>
+                        <h2 class="text-primary">
+    ₹{{ profit }}
+</h2>
                     </div>
                 </div>
             </div>
@@ -59,19 +61,23 @@
 
         <div class="text-center mt-4">
 
-            <a href="/add-sale" class="btn btn-success btn-lg me-3">
-                ➕ Add Sale
-            </a>
+    <a href="/add-sale" class="btn btn-success btn-lg me-3">
+        ➕ Add Sale
+    </a>
 
-            <a href="/add-expense" class="btn btn-danger btn-lg me-3">
-                ➖ Add Expense
-            </a>
+    <a href="/view-sales" class="btn btn-primary btn-lg me-3">
+        📋 View Sales
+    </a>
 
-            <a href="/view-sales" class="btn btn-primary btn-lg">
-                📋 View Sales
-            </a>
+    <a href="/add-expense" class="btn btn-danger btn-lg me-3">
+        ➖ Add Expense
+    </a>
 
-        </div>
+    <a href="/view-expenses" class="btn btn-warning btn-lg">
+        💰 View Expenses
+    </a>
+
+</div>
 
     </div>
 

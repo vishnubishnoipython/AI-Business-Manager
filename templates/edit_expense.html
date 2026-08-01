@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Edit Expense</title>
+</head>
+
+<body>
+
+<h1>✏️ Edit Expense</h1>
+
+<form method="POST">
+
+    <label>Category</label><br>
+    <input type="text" name="category" value="{{ expense[1] }}">
+
+    <br><br>
+
+    <label>Description</label><br>
+    <input type="text" name="description" value="{{ expense[2] }}">
+
+    <br><br>
+
+    <label>Amount</label><br>
+    <input type="number" name="amount" value="{{ expense[3] }}">
+
+    <br><br>
+
+    <button type="submit">
+        Update Expense
+    </button>
+
+</form>
+
+
+<br>
+
+<a href="/view-expenses">
+    Back to Expenses
+</a>
+
+
+</body>
+
+</html>
