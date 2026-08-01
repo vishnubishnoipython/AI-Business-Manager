@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request
+print("APP FILE LOADED")
 from database.db import (
     create_database,
     add_date_columns,
@@ -18,13 +19,20 @@ from database.db import (
     update_expense,
     delete_expense,
     get_total_expenses,
-    get_profit
+    get_profit,
+    
+    # Products
+    save_product,
+    get_all_products,
+    get_product_by_id,
+    update_product,
+    delete_product,
 )
 
 app = Flask(__name__)
 
 create_database()
-add_date_columns()
+# add_date_columns()
 
 @app.route("/")
 def home():
@@ -220,9 +228,96 @@ def delete_expense_route(expense_id):
     <br>
     <a href="/view-expenses">Back to Expenses</a>
     """
+# ---------------- PRODUCTS ---------------- #
 
+@app.route("/add-product", methods=["GET", "POST"])
+def add_product():
 
+    if request.method == "POST":
 
+        product_name = request.form["product_name"]
+        category = request.form["category"]
+        purchase_price = request.form["purchase_price"]
+        selling_price = request.form["selling_price"]
+        stock = request.form["stock"]
 
+        save_product(
+            product_name,
+            category,
+            purchase_price,
+            selling_price,
+            stock
+        )
+
+        return """
+        <h2>Product Saved Successfully ✅</h2>
+
+        <br>
+
+        <a href="/add-product">Add Another Product</a>
+
+        <br><br>
+
+        <a href="/">Back to Dashboard</a>
+        """
+
+    return render_template("add_product.html")
+
+@app.route("/view-products")
+def view_products():
+
+    print("VIEW PRODUCTS ROUTE HIT")
+    products = get_all_products()
+
+    return render_template(
+        "view_products.html",
+        products=products
+    )
+@app.route("/edit-product/<int:product_id>", methods=["GET", "POST"])
+def edit_product(product_id):
+
+    product = get_product_by_id(product_id)
+
+    if request.method == "POST":
+
+        product_name = request.form["product_name"]
+        category = request.form["category"]
+        purchase_price = request.form["purchase_price"]
+        selling_price = request.form["selling_price"]
+        stock = request.form["stock"]
+
+        update_product(
+            product_id,
+            product_name,
+            category,
+            purchase_price,
+            selling_price,
+            stock
+        )
+
+        return """
+        <h2>Product Updated Successfully ✅</h2>
+
+        <br>
+
+        <a href="/view-products">Back to Products</a>
+        """
+
+    return render_template(
+        "edit_product.html",
+        product=product
+    )
+@app.route("/delete-product/<int:product_id>")
+def delete_product_route(product_id):
+
+    delete_product(product_id)
+
+    return """
+    <h2>Product Deleted Successfully ✅</h2>
+
+    <br>
+
+    <a href="/view-products">Back to Products</a>
+    """
 if __name__ == "__main__":
     app.run(debug=True)

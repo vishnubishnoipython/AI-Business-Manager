@@ -27,6 +27,17 @@ def create_database():
             amount REAL
         )
     """)
+    # Product Table
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS products (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        product_name TEXT,
+        category TEXT,
+        purchase_price REAL,
+        selling_price REAL,
+        stock INTEGER
+    )
+""")
 
     conn.commit()
     conn.close()
@@ -252,3 +263,104 @@ def get_profit():
     profit = total_sales - total_expenses
 
     return profit
+
+    # ---------------- PRODUCTS ---------------- #
+
+def save_product(product_name, category, purchase_price, selling_price, stock):
+
+    conn = sqlite3.connect(DATABASE_NAME)
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        INSERT INTO products
+        (product_name, category, purchase_price, selling_price, stock)
+        VALUES (?, ?, ?, ?, ?)
+    """, (
+        product_name,
+        category,
+        purchase_price,
+        selling_price,
+        stock
+    ))
+
+    conn.commit()
+    conn.close()
+
+
+def get_all_products():
+
+    conn = sqlite3.connect(DATABASE_NAME)
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM products")
+
+    rows = cursor.fetchall()
+
+    conn.close()
+
+    return rows
+
+
+def get_product_by_id(product_id):
+
+    conn = sqlite3.connect(DATABASE_NAME)
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT * FROM products WHERE id=?",
+        (product_id,)
+    )
+
+    product = cursor.fetchone()
+
+    conn.close()
+
+    return product
+
+
+def update_product(
+    product_id,
+    product_name,
+    category,
+    purchase_price,
+    selling_price,
+    stock
+):
+
+    conn = sqlite3.connect(DATABASE_NAME)
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        UPDATE products
+        SET
+            product_name=?,
+            category=?,
+            purchase_price=?,
+            selling_price=?,
+            stock=?
+        WHERE id=?
+    """, (
+        product_name,
+        category,
+        purchase_price,
+        selling_price,
+        stock,
+        product_id
+    ))
+
+    conn.commit()
+    conn.close()
+
+
+def delete_product(product_id):
+
+    conn = sqlite3.connect(DATABASE_NAME)
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "DELETE FROM products WHERE id=?",
+        (product_id,)
+    )
+
+    conn.commit()
+    conn.close()
