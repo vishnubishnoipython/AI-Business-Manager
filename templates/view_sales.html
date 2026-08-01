@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>View Sales</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+<div class="container mt-5">
+
+<h2>📋 Sales List</h2>
+
+<table class="table table-bordered table-striped mt-4">
+
+<thead>
+
+<tr>
+
+<th>ID</th>
+<th>Customer</th>
+<th>Product</th>
+<th>Quantity</th>
+<th>Price</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for sale in sales %}
+
+<tr>
+
+<td>{{ sale[0] }}</td>
+<td>{{ sale[1] }}</td>
+<td>{{ sale[2] }}</td>
+<td>{{ sale[3] }}</td>
+<td>₹{{ sale[4] }}</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+<a href="/" class="btn btn-secondary">
+Dashboard
+</a>
+
+</div>
+
+</body>
+
+</html>
