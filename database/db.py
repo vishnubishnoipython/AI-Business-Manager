@@ -80,3 +80,18 @@ def delete_sale(sale_id):
 
     conn.commit()
     conn.close()
+
+
+def get_total_sales():
+    conn = sqlite3.connect(DATABASE_NAME)
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT SUM(price) FROM sales")
+    total = cursor.fetchone()[0]
+
+    conn.close()
+
+    if total is None:
+        return 0
+
+    return total

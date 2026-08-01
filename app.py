@@ -5,7 +5,8 @@ from database.db import (
     get_all_sales,
     get_sale_by_id,
     update_sale,
-    delete_sale
+    delete_sale,
+    get_total_sales
     )
 
 app = Flask(__name__)
@@ -15,7 +16,12 @@ create_database()
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    total_sales = get_total_sales()
+
+    return render_template(
+        "index.html",
+        total_sales=total_sales
+    )
 
 
 @app.route("/add-sale", methods=["GET", "POST"])
