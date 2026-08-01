@@ -44,3 +44,39 @@ def get_all_sales():
     conn.close()
 
     return rows
+
+
+def get_sale_by_id(sale_id):
+    conn = sqlite3.connect(DATABASE_NAME)
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM sales WHERE id = ?", (sale_id,))
+    sale = cursor.fetchone()
+
+    conn.close()
+
+    return sale
+
+
+def update_sale(sale_id, customer, product, quantity, price):
+    conn = sqlite3.connect(DATABASE_NAME)
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        UPDATE sales
+        SET customer=?, product=?, quantity=?, price=?
+        WHERE id=?
+    """, (customer, product, quantity, price, sale_id))
+
+    conn.commit()
+    conn.close()
+
+
+def delete_sale(sale_id):
+    conn = sqlite3.connect(DATABASE_NAME)
+    cursor = conn.cursor()
+
+    cursor.execute("DELETE FROM sales WHERE id = ?", (sale_id,))
+
+    conn.commit()
+    conn.close()

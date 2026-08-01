@@ -1,5 +1,12 @@
 from flask import Flask, render_template, request
-from database.db import create_database, save_sale, get_all_sales
+from database.db import (
+    create_database,
+    save_sale,
+    get_all_sales,
+    get_sale_by_id,
+    update_sale,
+    delete_sale
+    )
 
 app = Flask(__name__)
 
@@ -45,7 +52,37 @@ def view_sales():
     sales = get_all_sales()
 
     return render_template("view_sales.html", sales=sales)
+@app.route("/edit-sale/<int:sale_id>", methods=["GET", "POST"])
+def edit_sale(sale_id):
 
+    sale = get_sale_by_id(sale_id)
 
+    if request.method == "POST":
+        customer = request.form["customer"]
+        product = request.form["product"]
+        quantity = request.form["quantity"]
+        price = request.form["price"]
+
+        update_sale(sale_id, customer, product, quantity, price)
+
+        return """
+        <h2>Sale Updated Successfully ✅</h2>
+        <br>
+        <a href="/view-sales">Back to View Sales</a>
+        """
+
+    return render_template("edit_sale.html", sale=sale)
+@app.route("/delete-sale/<int:sale_id>")
+def delete_sale_route(sale_id):
+
+    delete_sale(sale_id)
+
+    return """
+    <h2>Sale Deleted Successfully ✅</h2>
+
+    <br>
+
+    <a href="/view-sales">Back to View Sales</a>
+    """
 if __name__ == "__main__":
     app.run(debug=True)
