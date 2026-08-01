@@ -1,70 +1,110 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>View Sales</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
 </head>
+
 
 <body class="bg-light">
 
+
 <div class="container mt-5">
 
-<h2>📋 Sales List</h2>
 
-<table class="table table-bordered table-striped mt-4">
+    <div class="card shadow p-4">
 
-<thead>
 
-<tr>
+        <h2 class="mb-4">
+            📋 Sales List
+        </h2>
 
-<th>ID</th>
-<th>Customer</th>
-<th>Product</th>
-<th>Quantity</th>
-<th>Price</th>
-<th>Action</th>
 
-</tr>
+        <table class="table table-bordered table-striped">
 
-</thead>
 
-<tbody>
+            <thead class="table-dark">
 
-{% for sale in sales %}
+                <tr>
+                    <th>ID</th>
+                    <th>Date</th>
+                    <th>Customer</th>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Action</th>
+                </tr>
 
-<tr>
+            </thead>
 
-<td>{{ sale[0] }}</td>
-<td>{{ sale[1] }}</td>
-<td>{{ sale[2] }}</td>
-<td>{{ sale[3] }}</td>
-<td>₹{{ sale[4] }}</td>
-<td>
-    <a href="/edit-sale/{{ sale[0] }}" class="btn btn-warning btn-sm">
-        ✏️ Edit
-    </a>
 
-    <a href="/delete-sale/{{ sale[0] }}"
-       class="btn btn-danger btn-sm"
-       onclick="return confirm('Are you sure you want to delete this sale?');">
-        🗑 Delete
-    </a>
-</td>
-</tr>
 
-{% endfor %}
+            <tbody>
 
-</tbody>
 
-</table>
+            {% for sale in sales %}
 
-<a href="/" class="btn btn-secondary">
-Dashboard
-</a>
+                <tr>
+
+                    <td>{{ sale[0] }}</td>
+
+                    <td>{{ sale[5] }}</td>
+
+                    <td>{{ sale[1] }}</td>
+
+                    <td>{{ sale[2] }}</td>
+
+                    <td>{{ sale[3] }}</td>
+
+                    <td>₹{{ sale[4] }}</td>
+
+
+                    <td>
+
+                        <a href="/edit-sale/{{ sale[0] }}" 
+                           class="btn btn-sm btn-warning">
+                            Edit
+                        </a>
+
+
+                        <a href="/delete-sale/{{ sale[0] }}"
+                           class="btn btn-sm btn-danger">
+                            Delete
+                        </a>
+
+                    </td>
+
+
+                </tr>
+
+
+            {% endfor %}
+
+
+            </tbody>
+
+
+        </table>
+
+
+
+        <a href="/" class="btn btn-secondary">
+            Dashboard
+        </a>
+
+
+    </div>
+
 
 </div>
+
 
 </body>
 

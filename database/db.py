@@ -31,21 +31,52 @@ def create_database():
     conn.commit()
     conn.close()
 
+def add_date_columns():
 
-# ---------------- SALES ---------------- #
+    print("Checking date columns...")
 
-def save_sale(customer, product, quantity, price):
     conn = sqlite3.connect(DATABASE_NAME)
     cursor = conn.cursor()
 
-    cursor.execute("""
-        INSERT INTO sales (customer, product, quantity, price)
-        VALUES (?, ?, ?, ?)
-    """, (customer, product, quantity, price))
+    try:
+        cursor.execute(
+            "ALTER TABLE sales ADD COLUMN date TEXT"
+        )
+        print("Sales date column added ✅")
+
+    except Exception as e:
+        print("Sales date error:", e)
+
+
+    try:
+        cursor.execute(
+            "ALTER TABLE expenses ADD COLUMN date TEXT"
+        )
+        print("Expenses date column added ✅")
+
+    except Exception as e:
+        print("Expenses date error:", e)
+
 
     conn.commit()
     conn.close()
 
+# ---------------- SALES ---------------- #
+
+def save_sale(customer, product, quantity, price, date):
+
+    conn = sqlite3.connect(DATABASE_NAME)
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        INSERT INTO sales 
+        (customer, product, quantity, price, date)
+        VALUES (?, ?, ?, ?, ?)
+    """,
+    (customer, product, quantity, price, date))
+
+    conn.commit()
+    conn.close()
 
 def get_all_sales():
     conn = sqlite3.connect(DATABASE_NAME)

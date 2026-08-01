@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 from database.db import (
     create_database,
+    add_date_columns,
 
     # Sales
     save_sale,
@@ -23,7 +24,7 @@ from database.db import (
 app = Flask(__name__)
 
 create_database()
-
+add_date_columns()
 
 @app.route("/")
 def home():
@@ -52,8 +53,9 @@ def add_sale():
         product = request.form["product"]
         quantity = request.form["quantity"]
         price = request.form["price"]
+        date = request.form["date"]
 
-        save_sale(customer, product, quantity, price)
+        save_sale(customer, product, quantity, price,date)
 
         return """
         <h2>Sale Saved Successfully ✅</h2>
