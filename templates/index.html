@@ -40,7 +40,7 @@
                 <div class="card shadow text-center">
                     <div class="card-body">
                         <h5 class="card-title">Today's Expense</h5>
-                        <h2 class="text-danger">₹0</h2>
+                        <h2 class="text-danger">₹{{ total_expenses }}</h2>
                     </div>
                 </div>
             </div>
@@ -63,9 +63,9 @@
                 ➕ Add Sale
             </a>
 
-            <button class="btn btn-danger btn-lg me-3">
+            <a href="/add-expense" class="btn btn-danger btn-lg me-3">
                 ➖ Add Expense
-            </button>
+            </a>
 
             <a href="/view-sales" class="btn btn-primary btn-lg">
                 📋 View Sales

@@ -6,7 +6,10 @@ from database.db import (
     get_sale_by_id,
     update_sale,
     delete_sale,
-    get_total_sales
+    get_total_sales,
+    save_expense,
+    get_all_expenses,
+    get_total_expenses
     )
 
 app = Flask(__name__)
@@ -17,10 +20,12 @@ create_database()
 @app.route("/")
 def home():
     total_sales = get_total_sales()
+    total_expenses = get_total_expenses()
 
     return render_template(
         "index.html",
-        total_sales=total_sales
+        total_sales=total_sales,
+        total_expenses=total_expenses
     )
 
 
@@ -90,5 +95,31 @@ def delete_sale_route(sale_id):
 
     <a href="/view-sales">Back to View Sales</a>
     """
+
+
+@app.route("/add-expense", methods=["GET", "POST"])
+def add_expense():
+
+    if request.method == "POST":
+        category = request.form["category"]
+        description = request.form["description"]
+        amount = request.form["amount"]
+
+        save_expense(category, description, amount)
+
+        return """
+        <h2>Expense Saved Successfully ✅</h2>
+
+        <br>
+
+        <a href="/add-expense">Add Another Expense</a>
+
+        <br><br>
+
+        <a href="/">Back to Dashboard</a>
+        """
+
+    return render_template("add_expense.html")
+    
 if __name__ == "__main__":
     app.run(debug=True)
