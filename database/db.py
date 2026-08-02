@@ -424,6 +424,36 @@ def reduce_stock(product_name, sold_quantity):
     conn.commit()
     conn.close()
 
+def increase_stock(product_name, purchase_quantity):
+
+    conn = sqlite3.connect(DATABASE_NAME)
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT *
+        FROM products
+        WHERE LOWER(product_name)=LOWER(?)
+    """, (product_name,))
+
+    product = cursor.fetchone()
+
+    if product:
+
+        current_stock = product[5]
+
+        new_stock = current_stock + purchase_quantity
+
+        cursor.execute("""
+            UPDATE products
+            SET stock=?
+            WHERE id=?
+        """, (
+            new_stock,
+            product[0]
+        ))
+
+    conn.commit()
+    conn.close()
 def get_current_stock(product_name):
 
     conn = sqlite3.connect(DATABASE_NAME)

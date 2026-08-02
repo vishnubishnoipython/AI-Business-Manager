@@ -31,6 +31,7 @@ from database.db import (
     update_product,
     delete_product,
     reduce_stock,
+    increase_stock,
     save_stock_ledger,
     get_current_stock,
     get_stock_ledger,
@@ -437,6 +438,8 @@ def ai_chat():
 
         result = parse_message(message, products)
 
+        # ================= SALE =================
+
         if result["type"] == "sale":
 
             today = datetime.now().strftime("%d-%m-%Y")
@@ -448,10 +451,12 @@ def ai_chat():
                 result["amount"],
                 today
             )
+
             reduce_stock(
                 result["product"],
                 result["quantity"]
             )
+
             balance_stock = get_current_stock(result["product"])
 
             save_stock_ledger(
@@ -462,6 +467,7 @@ def ai_chat():
                 "AI Chat",
                 today
             )
+
             return f"""
             <h2>✅ Sale Saved Successfully</h2>
 
@@ -476,8 +482,50 @@ def ai_chat():
             <a href="/ai-chat">⬅ Back</a>
             """
 
+        # ================= PURCHASE =================
+
+        if result["type"] == "purchase":
+
+            today = datetime.now().strftime("%d-%m-%Y")
+
+            increase_stock(
+                result["product"],
+                result["quantity"]
+            )
+
+            balance_stock = get_current_stock(result["product"])
+
+            save_stock_ledger(
+                result["product"],
+                "PURCHASE",
+                result["quantity"],
+                balance_stock,
+                "AI Chat",
+                today
+            )
+
+            return f"""
+            <h2>✅ Purchase Saved Successfully</h2>
+
+            <pre>{result}</pre>
+
+            <br>
+
+            <a href="/view-products">📦 View Products</a>
+
+            <br><br>
+
+            <a href="/view-stock-ledger">📋 View Stock Ledger</a>
+
+            <br><br>
+
+            <a href="/ai-chat">⬅ Back</a>
+            """
+
+        # ================= UNKNOWN =================
+
         return f"""
-        <h2>❌ No Sale Found</h2>
+        <h2>❌ No Sale/Purchase Found</h2>
 
         <pre>{result}</pre>
 
@@ -487,11 +535,10 @@ def ai_chat():
         """
 
     return render_template("ai_chat.html")
-    
 @app.route("/ai-test")
 def ai_test():
 
-    message = "Ram ko 5 bag Cement 4500 me diye"
+    message = "100 bag Cement kharide 45000 me"
 
     products = get_product_names()
 

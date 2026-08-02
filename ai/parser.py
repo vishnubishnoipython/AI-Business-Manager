@@ -43,4 +43,14 @@ def parse_message(message, products):
     if "diya" in message or "diye" in message:
         data["type"] = "sale"
 
+    # Purchase Detection
+    if (
+    "kharida" in message
+    or "kharide" in message
+    or "purchase" in message
+    or "buy" in message
+):
+        data["type"] = "purchase"
+
     return data
+    
