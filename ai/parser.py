@@ -2,21 +2,8 @@ print("AI Parser Loaded Successfully")
 
 import re
 
-PRODUCTS = [
-    "cement",
-    "sugar",
-    "rice",
-    "wheat",
-    "aata",
-    "fertilizer",
-    "biomass",
-    "pellets",
-    "mustard",
-    "diesel"
-]
 
-
-def parse_message(message):
+def parse_message(message, products):
 
     message = message.lower()
 
@@ -47,8 +34,8 @@ def parse_message(message):
         data["customer"] = words[0].title()
 
     # Product Detection
-    for product in PRODUCTS:
-        if product in message:
+    for product in products:
+        if product.lower() in message:
             data["product"] = product.title()
             break
 

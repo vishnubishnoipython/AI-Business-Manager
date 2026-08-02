@@ -25,6 +25,7 @@ from database.db import (
     # Products
     save_product,
     get_all_products,
+    get_product_names,
     get_product_by_id,
     update_product,
     delete_product,
@@ -424,14 +425,19 @@ def delete_customer_route(customer_id):
 @app.route("/ai-test")
 def ai_test():
 
-    message = "Ram ko 5 bag cement 4500 me diye"
+    message = "Ram ko 5 bag Cement 4500 me diye"
 
-    result = parse_message(message)
+    products = get_product_names()
+
+    result = parse_message(message, products)
 
     return f"""
     <h2>AI Test</h2>
-
     <pre>{result}</pre>
     """
+@app.route("/products-test")
+def products_test():
+    return str(get_product_names())
+    
 if __name__ == "__main__":
     app.run(debug=True)

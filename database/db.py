@@ -310,7 +310,24 @@ def get_all_products():
 
     return rows
 
+def get_product_names():
 
+    conn = sqlite3.connect(DATABASE_NAME)
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT product_name FROM products")
+
+    rows = cursor.fetchall()
+
+    conn.close()
+
+    products = []
+
+    for row in rows:
+        products.append(row[0].lower())
+
+    return products
+    
 def get_product_by_id(product_id):
 
     conn = sqlite3.connect(DATABASE_NAME)
