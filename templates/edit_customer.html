@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Edit Customer</title>
+</head>
+
+<body>
+
+<h2>Edit Customer</h2>
+
+<form method="POST">
+
+    <label>Customer Name</label><br>
+    <input
+        type="text"
+        name="customer_name"
+        value="{{ customer[1] }}"
+        required
+    >
+    <br><br>
+
+    <label>Mobile</label><br>
+    <input
+        type="text"
+        name="mobile"
+        value="{{ customer[2] }}"
+    >
+    <br><br>
+
+    <label>Email</label><br>
+    <input
+        type="email"
+        name="email"
+        value="{{ customer[3] }}"
+    >
+    <br><br>
+
+    <label>GST</label><br>
+    <input
+        type="text"
+        name="gst"
+        value="{{ customer[4] }}"
+    >
+    <br><br>
+
+    <label>Address</label><br>
+    <textarea name="address">{{ customer[5] }}</textarea>
+
+    <br><br>
+
+    <button type="submit">
+        Update Customer
+    </button>
+
+</form>
+
+<br>
+
+<a href="/view-customers">
+    Back to Customers
+</a>
+
+</body>
+</html>

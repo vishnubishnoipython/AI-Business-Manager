@@ -31,6 +31,9 @@ from database.db import (
     # Customers
     save_customer,
     get_all_customers,
+    get_customer_by_id,
+    update_customer,
+    delete_customer,
 )
 
 app = Flask(__name__)
@@ -366,5 +369,53 @@ def view_customers():
         "view_customers.html",
         customers=customers
     )
+@app.route("/edit-customer/<int:customer_id>", methods=["GET", "POST"])
+def edit_customer(customer_id):
+
+    customer = get_customer_by_id(customer_id)
+
+    if request.method == "POST":
+
+        customer_name = request.form["customer_name"]
+        mobile = request.form["mobile"]
+        email = request.form["email"]
+        gst = request.form["gst"]
+        address = request.form["address"]
+
+        update_customer(
+            customer_id,
+            customer_name,
+            mobile,
+            email,
+            gst,
+            address
+        )
+
+        return """
+        <h2>Customer Updated Successfully ✅</h2>
+
+        <br>
+
+        <a href="/view-customers">Back to Customers</a>
+        """
+
+    return render_template(
+        "edit_customer.html",
+        customer=customer
+    )
+@app.route("/delete-customer/<int:customer_id>")
+def delete_customer_route(customer_id):
+
+    delete_customer(customer_id)
+
+    return """
+    <h2>Customer Deleted Successfully ✅</h2>
+
+    <br>
+
+    <a href="/view-customers">
+        Back to Customers
+    </a>
+    """
 if __name__ == "__main__":
     app.run(debug=True)

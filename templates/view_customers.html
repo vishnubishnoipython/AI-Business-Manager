@@ -18,6 +18,8 @@
     <th>Email</th>
     <th>GST</th>
     <th>Address</th>
+    <th>Edit</th>
+    <th>Delete</th>
 </tr>
 
 {% for customer in customers %}
@@ -30,7 +32,17 @@
     <td>{{ customer[3] }}</td>
     <td>{{ customer[4] }}</td>
     <td>{{ customer[5] }}</td>
-
+    <td>
+    <a href="/edit-customer/{{ customer[0] }}">
+        Edit
+    </a>
+    </td>
+    <td>
+    <a href="/delete-customer/{{ customer[0] }}"
+       onclick="return confirm('Delete this customer?')">
+        Delete
+    </a>
+    </td>
 </tr>
 
 {% endfor %}

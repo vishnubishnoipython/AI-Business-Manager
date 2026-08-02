@@ -406,3 +406,64 @@ def get_all_customers():
     return rows
     conn.commit()
     conn.close()
+def get_customer_by_id(customer_id):
+
+    conn = sqlite3.connect(DATABASE_NAME)
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT * FROM customers WHERE id=?",
+        (customer_id,)
+    )
+
+    customer = cursor.fetchone()
+
+    conn.close()
+
+    return customer
+
+
+def update_customer(
+    customer_id,
+    customer_name,
+    mobile,
+    email,
+    gst,
+    address
+):
+
+    conn = sqlite3.connect(DATABASE_NAME)
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        UPDATE customers
+        SET
+            customer_name=?,
+            mobile=?,
+            email=?,
+            gst=?,
+            address=?
+        WHERE id=?
+    """, (
+        customer_name,
+        mobile,
+        email,
+        gst,
+        address,
+        customer_id
+    ))
+
+    conn.commit()
+    conn.close()
+def delete_customer(customer_id):
+
+    conn = sqlite3.connect(DATABASE_NAME)
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "DELETE FROM customers WHERE id=?",
+        (customer_id,)
+    )
+
+    conn.commit()
+    conn.close()
