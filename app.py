@@ -30,6 +30,9 @@ from database.db import (
     get_product_by_id,
     update_product,
     delete_product,
+    reduce_stock,
+    save_stock_ledger,
+    get_current_stock,
 
     # Customers
     save_customer,
@@ -444,7 +447,20 @@ def ai_chat():
                 result["amount"],
                 today
             )
+            reduce_stock(
+                result["product"],
+                result["quantity"]
+            )
+            balance_stock = get_current_stock(result["product"])
 
+            save_stock_ledger(
+                result["product"],
+                "SALE",
+                result["quantity"],
+                balance_stock,
+                "AI Chat",
+                today
+            )
             return f"""
             <h2>✅ Sale Saved Successfully</h2>
 

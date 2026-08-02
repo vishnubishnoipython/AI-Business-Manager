@@ -49,6 +49,18 @@ def create_database():
         address TEXT
     )
 """)
+    # Stock Ledger Table
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS stock_ledger(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        product TEXT,
+        transaction_type TEXT,
+        quantity INTEGER,
+        balance_stock INTEGER,
+        remarks TEXT,
+        date TEXT
+)
+""")
     conn.commit()
     conn.close()
 
@@ -327,7 +339,7 @@ def get_product_names():
         products.append(row[0].lower())
 
     return products
-    
+
 def get_product_by_id(product_id):
 
     conn = sqlite3.connect(DATABASE_NAME)
@@ -378,7 +390,93 @@ def update_product(
     conn.commit()
     conn.close()
 
+def reduce_stock(product_name, sold_quantity):
 
+    conn = sqlite3.connect(DATABASE_NAME)
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT *
+        FROM products
+        WHERE LOWER(product_name)=LOWER(?)
+    """, (product_name,))
+
+    product = cursor.fetchone()
+
+    if product:
+
+        current_stock = product[5]
+
+        new_stock = current_stock - sold_quantity
+
+        if new_stock < 0:
+            new_stock = 0
+
+        cursor.execute("""
+            UPDATE products
+            SET stock=?
+            WHERE id=?
+        """, (
+            new_stock,
+            product[0]
+        ))
+
+    conn.commit()
+    conn.close()
+
+def get_current_stock(product_name):
+
+    conn = sqlite3.connect(DATABASE_NAME)
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT stock
+        FROM products
+        WHERE LOWER(product_name)=LOWER(?)
+    """, (product_name,))
+
+    row = cursor.fetchone()
+
+    conn.close()
+
+    if row:
+        return row[0]
+
+    return 0
+def save_stock_ledger(
+    product,
+    transaction_type,
+    quantity,
+    balance_stock,
+    remarks,
+    date
+):
+
+    conn = sqlite3.connect(DATABASE_NAME)
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        INSERT INTO stock_ledger
+        (
+            product,
+            transaction_type,
+            quantity,
+            balance_stock,
+            remarks,
+            date
+        )
+        VALUES (?, ?, ?, ?, ?, ?)
+    """, (
+        product,
+        transaction_type,
+        quantity,
+        balance_stock,
+        remarks,
+        date
+    ))
+
+    conn.commit()
+    conn.close()
 def delete_product(product_id):
 
     conn = sqlite3.connect(DATABASE_NAME)
