@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Stock Ledger</title>
+
+    <style>
+
+        body{
+            font-family: Arial;
+            margin:40px;
+            background:#f5f5f5;
+        }
+
+        h1{
+            color:#333;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            background:white;
+        }
+
+        th{
+            background:#28a745;
+            color:white;
+            padding:12px;
+        }
+
+        td{
+            padding:10px;
+            border-bottom:1px solid #ddd;
+            text-align:center;
+        }
+
+        tr:hover{
+            background:#f1f1f1;
+        }
+
+        a{
+            text-decoration:none;
+            color:blue;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<h1>📦 Stock Ledger</h1>
+
+<table>
+
+<tr>
+
+    <th>ID</th>
+    <th>Product</th>
+    <th>Type</th>
+    <th>Quantity</th>
+    <th>Balance Stock</th>
+    <th>Remarks</th>
+    <th>Date</th>
+
+</tr>
+
+{% for row in ledger %}
+
+<tr>
+
+    <td>{{ row[0] }}</td>
+    <td>{{ row[1] }}</td>
+    <td>{{ row[2] }}</td>
+    <td>{{ row[3] }}</td>
+    <td>{{ row[4] }}</td>
+    <td>{{ row[5] }}</td>
+    <td>{{ row[6] }}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+<br>
+
+<a href="/">⬅ Dashboard</a>
+
+</body>
+</html>

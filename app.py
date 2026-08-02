@@ -33,6 +33,7 @@ from database.db import (
     reduce_stock,
     save_stock_ledger,
     get_current_stock,
+    get_stock_ledger,
 
     # Customers
     save_customer,
@@ -531,6 +532,16 @@ def ai_save_sale():
         """
 
     return "No Sale Found"
+
+@app.route("/view-stock-ledger")
+def view_stock_ledger():
+
+    ledger = get_stock_ledger()
+
+    return render_template(
+        "view_stock_ledger.html",
+        ledger=ledger
+    )
 
 if __name__ == "__main__":
     app.run(debug=True)

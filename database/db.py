@@ -582,3 +582,19 @@ def delete_customer(customer_id):
 
     conn.commit()
     conn.close()
+def get_stock_ledger():
+
+    conn = sqlite3.connect(DATABASE_NAME)
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT *
+        FROM stock_ledger
+        ORDER BY id DESC
+    """)
+
+    rows = cursor.fetchall()
+
+    conn.close()
+
+    return rows
