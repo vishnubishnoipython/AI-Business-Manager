@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 print("APP FILE LOADED")
+from ai.parser import *
 from database.db import (
     create_database,
     add_date_columns,
@@ -416,6 +417,21 @@ def delete_customer_route(customer_id):
     <a href="/view-customers">
         Back to Customers
     </a>
+    """
+    from ai.parser import parse_message
+
+
+@app.route("/ai-test")
+def ai_test():
+
+    message = "Ram ko 5 bag cement 4500 me diye"
+
+    result = parse_message(message)
+
+    return f"""
+    <h2>AI Test</h2>
+
+    <pre>{result}</pre>
     """
 if __name__ == "__main__":
     app.run(debug=True)
