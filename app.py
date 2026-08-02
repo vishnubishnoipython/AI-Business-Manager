@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request
+from datetime import datetime
 print("APP FILE LOADED")
 from ai.parser import *
 from database.db import (
@@ -435,9 +436,37 @@ def ai_test():
     <h2>AI Test</h2>
     <pre>{result}</pre>
     """
-@app.route("/products-test")
-def products_test():
-    return str(get_product_names())
-    
+from datetime import datetime
+
+
+@app.route("/ai-save-sale")
+def ai_save_sale():
+
+    message = "Ram ko 5 bag Cement 4500 me diye"
+
+    products = get_product_names()
+
+    result = parse_message(message, products)
+
+    if result["type"] == "sale":
+
+        today = datetime.now().strftime("%d-%m-%Y")
+
+        save_sale(
+            result["customer"],
+            result["product"],
+            result["quantity"],
+            result["amount"],
+            today
+        )
+
+        return f"""
+        <h2>Sale Saved Successfully ✅</h2>
+
+        <pre>{result}</pre>
+        """
+
+    return "No Sale Found"
+
 if __name__ == "__main__":
     app.run(debug=True)
