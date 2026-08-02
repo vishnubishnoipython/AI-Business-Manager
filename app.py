@@ -27,6 +27,10 @@ from database.db import (
     get_product_by_id,
     update_product,
     delete_product,
+
+    # Customers
+    save_customer,
+    get_all_customers,
 )
 
 app = Flask(__name__)
@@ -319,5 +323,48 @@ def delete_product_route(product_id):
 
     <a href="/view-products">Back to Products</a>
     """
+    # ---------------- CUSTOMERS ---------------- #
+
+@app.route("/add-customer", methods=["GET", "POST"])
+def add_customer():
+
+    if request.method == "POST":
+
+        customer_name = request.form["customer_name"]
+        mobile = request.form["mobile"]
+        email = request.form["email"]
+        gst = request.form["gst"]
+        address = request.form["address"]
+
+        save_customer(
+            customer_name,
+            mobile,
+            email,
+            gst,
+            address
+        )
+
+        return """
+        <h2>Customer Saved Successfully ✅</h2>
+
+        <br>
+
+        <a href="/add-customer">Add Another Customer</a>
+
+        <br><br>
+
+        <a href="/">Back to Dashboard</a>
+        """
+
+    return render_template("add_customer.html")
+@app.route("/view-customers")
+def view_customers():
+
+    customers = get_all_customers()
+
+    return render_template(
+        "view_customers.html",
+        customers=customers
+    )
 if __name__ == "__main__":
     app.run(debug=True)

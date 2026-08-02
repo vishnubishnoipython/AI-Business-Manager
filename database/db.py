@@ -38,7 +38,17 @@ def create_database():
         stock INTEGER
     )
 """)
-
+    # Customer Table
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS customers(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        customer_name TEXT NOT NULL,
+        mobile TEXT,
+        email TEXT,
+        gst TEXT,
+        address TEXT
+    )
+""")
     conn.commit()
     conn.close()
 
@@ -362,5 +372,37 @@ def delete_product(product_id):
         (product_id,)
     )
 
+    conn.commit()
+    conn.close()
+
+
+def save_customer(customer_name, mobile, email, gst, address):
+
+    conn = sqlite3.connect(DATABASE_NAME)
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        INSERT INTO customers
+        (customer_name, mobile, email, gst, address)
+        VALUES (?, ?, ?, ?, ?)
+    """, (
+        customer_name,
+        mobile,
+        email,
+        gst,
+        address
+    ))
+def get_all_customers():
+
+    conn = sqlite3.connect(DATABASE_NAME)
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM customers")
+
+    rows = cursor.fetchall()
+
+    conn.close()
+
+    return rows
     conn.commit()
     conn.close()

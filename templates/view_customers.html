@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>View Customers</title>
+</head>
+
+<body>
+
+<h2>Customer List</h2>
+
+<table border="1" cellpadding="10">
+
+<tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Mobile</th>
+    <th>Email</th>
+    <th>GST</th>
+    <th>Address</th>
+</tr>
+
+{% for customer in customers %}
+
+<tr>
+
+    <td>{{ customer[0] }}</td>
+    <td>{{ customer[1] }}</td>
+    <td>{{ customer[2] }}</td>
+    <td>{{ customer[3] }}</td>
+    <td>{{ customer[4] }}</td>
+    <td>{{ customer[5] }}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+<br>
+
+<a href="/">Dashboard</a>
+
+</body>
+</html>
