@@ -422,7 +422,55 @@ def delete_customer_route(customer_id):
     """
     from ai.parser import parse_message
 
+@app.route("/ai-chat", methods=["GET", "POST"])
+def ai_chat():
 
+    if request.method == "POST":
+
+        message = request.form["message"]
+
+        products = get_product_names()
+
+        result = parse_message(message, products)
+
+        if result["type"] == "sale":
+
+            today = datetime.now().strftime("%d-%m-%Y")
+
+            save_sale(
+                result["customer"],
+                result["product"],
+                result["quantity"],
+                result["amount"],
+                today
+            )
+
+            return f"""
+            <h2>✅ Sale Saved Successfully</h2>
+
+            <pre>{result}</pre>
+
+            <br>
+
+            <a href="/view-sales">📋 View Sales</a>
+
+            <br><br>
+
+            <a href="/ai-chat">⬅ Back</a>
+            """
+
+        return f"""
+        <h2>❌ No Sale Found</h2>
+
+        <pre>{result}</pre>
+
+        <br>
+
+        <a href="/ai-chat">⬅ Back</a>
+        """
+
+    return render_template("ai_chat.html")
+    
 @app.route("/ai-test")
 def ai_test():
 
