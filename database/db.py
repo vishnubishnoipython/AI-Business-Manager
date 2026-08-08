@@ -61,6 +61,18 @@ def create_database():
         date TEXT
 )
 """)
+    # Customer Ledger Table
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS customer_ledger (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        customer TEXT,
+        transaction_type TEXT,
+        amount REAL,
+        balance REAL,
+        remarks TEXT,
+        date TEXT
+)
+""")
     conn.commit()
     conn.close()
 
@@ -612,13 +624,80 @@ def delete_customer(customer_id):
 
     conn.commit()
     conn.close()
+def save_customer_ledger(
+    customer,
+    transaction_type,
+    amount,
+    balance,
+    remarks,
+    date
+):
+
+    conn = sqlite3.connect(DATABASE_NAME)
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        INSERT INTO customer_ledger
+        (
+            customer,
+            transaction_type,
+            amount,
+            balance,
+            remarks,
+            date
+        )
+        VALUES (?, ?, ?, ?, ?, ?)
+    """, (
+        customer,
+        transaction_type,
+        amount,
+        balance,
+        remarks,
+        date
+    ))
+
+    conn.commit()
+    conn.close()
+    conn = sqlite3.connect(DATABASE_NAME)
+    cursor = conn.cursor()
+
+def get_all_customer_ledger():
+
+    conn = sqlite3.connect(DATABASE_NAME)
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT
+            id,
+            customer,
+            transaction_type,
+            amount,
+            balance,
+            remarks,
+            date
+        FROM customer_ledger
+        ORDER BY id DESC
+    """)
+
+    rows = cursor.fetchall()
+
+    conn.close()
+
+    return rows
 def get_stock_ledger():
 
     conn = sqlite3.connect(DATABASE_NAME)
     cursor = conn.cursor()
 
     cursor.execute("""
-        SELECT *
+        SELECT
+            id,
+            product,
+            transaction_type,
+            quantity,
+            balance,
+            reference,
+            date
         FROM stock_ledger
         ORDER BY id DESC
     """)
@@ -628,3 +707,24 @@ def get_stock_ledger():
     conn.close()
 
     return rows
+def get_customer_balance(customer):
+
+    conn = sqlite3.connect(DATABASE_NAME)
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT balance
+        FROM customer_ledger
+        WHERE customer=?
+        ORDER BY id DESC
+        LIMIT 1
+    """, (customer,))
+
+    row = cursor.fetchone()
+
+    conn.close()
+
+    if row:
+        return float(row[0])
+
+    return 0.0    

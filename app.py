@@ -42,6 +42,9 @@ from database.db import (
     get_customer_by_id,
     update_customer,
     delete_customer,
+    save_customer_ledger,
+    get_customer_balance,
+    get_all_customer_ledger,
 )
 
 app = Flask(__name__)
@@ -468,17 +471,26 @@ def ai_chat():
                 today
             )
 
+            save_customer_ledger(
+                result["customer"],
+                "SALE",
+                result["amount"],
+                result["amount"],
+                "AI Chat Sale",
+                today
+            )
+
             return f"""
             <h2>✅ Sale Saved Successfully</h2>
-
             <pre>{result}</pre>
 
             <br>
-
             <a href="/view-sales">📋 View Sales</a>
 
             <br><br>
+            <a href="/customer-ledger">📋 Customer Ledger</a>
 
+            <br><br>
             <a href="/ai-chat">⬅ Back</a>
             """
 
@@ -506,39 +518,105 @@ def ai_chat():
 
             return f"""
             <h2>✅ Purchase Saved Successfully</h2>
-
             <pre>{result}</pre>
 
             <br>
-
             <a href="/view-products">📦 View Products</a>
 
             <br><br>
-
             <a href="/view-stock-ledger">📋 View Stock Ledger</a>
 
             <br><br>
+            <a href="/ai-chat">⬅ Back</a>
+            """
 
+        # ================= EXPENSE =================
+
+        if result["type"] == "expense":
+
+            expense_name = message.title()
+
+            save_expense(
+                "AI Expense",
+                expense_name,
+                result["amount"]
+            )
+
+            return f"""
+            <h2>✅ Expense Saved Successfully</h2>
+            <pre>{result}</pre>
+
+            <br>
+            <a href="/view-expenses">💰 View Expenses</a>
+
+            <br><br>
+            <a href="/ai-chat">⬅ Back</a>
+            """
+
+        # ================= PAYMENT =================
+
+        if result["type"] == "payment":
+
+            today = datetime.now().strftime("%d-%m-%Y")
+
+            customer = result["customer"]
+
+            payment_amount = result["amount"]
+
+            old_balance = get_customer_balance(customer)
+
+            new_balance = old_balance - payment_amount
+
+            save_customer_ledger(
+                customer,
+                "PAYMENT",
+                payment_amount,
+                new_balance,
+                "AI Chat Payment",
+                today
+            )
+
+            return f"""
+            <h2>✅ Payment Saved Successfully</h2>
+
+            <pre>{result}</pre>
+
+            <p>Previous Balance: ₹{old_balance}</p>
+            <p>Payment: ₹{payment_amount}</p>
+            <p>Remaining Balance: ₹{new_balance}</p>
+
+            <br>
+            <a href="/customer-ledger">📋 Customer Ledger</a>
+
+            <br><br>
             <a href="/ai-chat">⬅ Back</a>
             """
 
         # ================= UNKNOWN =================
 
         return f"""
-        <h2>❌ No Sale/Purchase Found</h2>
+        <h2>❌ Transaction Not Recognized</h2>
 
         <pre>{result}</pre>
 
         <br>
-
         <a href="/ai-chat">⬅ Back</a>
         """
 
     return render_template("ai_chat.html")
+@app.route("/customer-ledger")
+def customer_ledger():
+
+    ledger = get_all_customer_ledger()
+
+    return render_template(
+        "customer_ledger.html",
+        ledger=ledger
+    )    
 @app.route("/ai-test")
 def ai_test():
 
-    message = "100 bag Cement kharide 45000 me"
+    message = "Diesel 2500"
 
     products = get_product_names()
 
